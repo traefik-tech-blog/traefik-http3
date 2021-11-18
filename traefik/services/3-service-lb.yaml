@@ -1,0 +1,21 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: traefik
+  annotations:
+    service.beta.kubernetes.io/aws-load-balancer-type: "nlb" # Ask for a Network Load Balancer on AWS
+spec:
+  type: LoadBalancer
+  ports:
+    - protocol: TCP
+      name: web
+      port: 80
+    - protocol: TCP # We have to listen on TCP on port 443
+      name: websecure-tcp
+      port: 443
+    - protocol: UDP # We have to listen on UDP on port 443 for HTTP/3
+      name: websecure-udp
+      port: 443
+  selector:
+    app: traefik
